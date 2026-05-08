@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio &mdash; toritori7</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <ul>
+    <li><a href="../">Home</a></li>
+    <li><a href="./" class="active">Portfolio</a></li>
+    <li><a href="../contact/">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h1 class="page-heading">Portfolio</h1>
+  <p class="portfolio-intro">Three side projects, each a different problem in a different stack. Click any item for the full single-page case study &mdash; problem, personas, journey, features, architecture.</p>
+
+  <ul class="work-list">
+
+    <li>
+      <a href="../gaokao-zhiyuan/" class="work-item">
+        <div class="work-num">01</div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span>2026</span>
+            <span>Consumer &middot; AI</span>
+            <span>Web</span>
+          </div>
+          <h2 class="work-title">高考志愿助手</h2>
+          <p class="work-tagline">"AI + 真人学长，让每一个高考生都能做出不后悔的志愿选择。"</p>
+          <p class="work-desc">A platform for the 13.5M Chinese students taking the gaokao each year. Free AI tooling absorbs the surge of results-day traffic; paid 1-on-1 sessions with verified college mentors at ¥99–299 capture the high-intent tail &mdash; versus ¥10k+ legacy consultants.</p>
+          <div class="work-tech">
+            <span>Next.js</span><span>FastAPI</span><span>Claude Haiku</span><span>RAG</span><span>SQLite</span>
+          </div>
+        </div>
+        <span class="work-cta">View &rarr;</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="../polytrader/" class="work-item">
+        <div class="work-num">02</div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span>2026</span>
+            <span>Quant &middot; On-chain</span>
+            <span>Python</span>
+          </div>
+          <h2 class="work-title">polytrader</h2>
+          <p class="work-tagline">"From Polymarket data toolkit to a self-running quant desk."</p>
+          <p class="work-desc">A Python system that crawls all Polymarket markets, runs walk-forward backtests, and places live limit orders against the V2 CLOB. Backtest gating is structural &mdash; <code>execute</code> refuses to send orders if win rate, Sharpe, or profit factor don't pass thresholds.</p>
+          <div class="work-tech">
+            <span>Python</span><span>SQLite</span><span>py-clob-client-v2</span><span>web3.py</span><span>EIP-712 v2</span>
+          </div>
+        </div>
+        <span class="work-cta">View &rarr;</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="../footprint/" class="work-item">
+        <div class="work-num">03</div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span>2025</span>
+            <span>iOS &middot; SwiftUI</span>
+            <span>Mobile</span>
+          </div>
+          <h2 class="work-title">footprint</h2>
+          <p class="work-tagline">"Walk the world, watch the fog lift."</p>
+          <p class="work-desc">An iOS app that paints dark fog over the entire world map and punches through only where you've actually been &mdash; by GPS, photo EXIF, or imports from prior fog-of-war apps. Cyan-blue admin-region overlays for countries, US states &amp; counties, and 中国省/市/区县.</p>
+          <div class="work-tech">
+            <span>SwiftUI</span><span>MapKit</span><span>CoreImage</span><span>PhotosUI</span><span>GeoJSON</span>
+          </div>
+        </div>
+        <span class="work-cta">View &rarr;</span>
+      </a>
+    </li>
+
+  </ul>
+</main>
+
+<footer>
+  &copy; 2026 &nbsp;&middot;&nbsp; toritori7
+</footer>
+
+</body>
+</html>
