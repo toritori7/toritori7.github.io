@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footprint — Product Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1a1a2e;
+      --navy-light: #16213e;
+      --coral: #e94560;
+      --coral-light: #ff6b6b;
+      --cream: #f8f6f2;
+      --cream-dark: #eee9e0;
+      --text: #2d2d3a;
+      --text-light: #6b6b7b;
+      --accent-blue: #45a5e8;     /* sampled from FootprintView highlight */
+      --accent-cyan: #99e0ff;     /* footprintHighlightStroke */
+      --accent-green: #2ecc71;
+      --accent-purple: #9b59b6;
+      --accent-orange: #f39c12;
+      --shadow: 0 4px 20px rgba(26, 26, 46, 0.08);
+      --shadow-hover: 0 8px 30px rgba(26, 26, 46, 0.15);
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      color: var(--text); background: var(--cream); line-height: 1.7;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; font-weight: 400; }
+    code, .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; }
+
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(248, 246, 242, 0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 26, 46, 0.06); padding: 0 2rem;
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); text-decoration: none; }
+    .nav-logo span { color: var(--accent-blue); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-light); font-size: 0.85rem;
+      font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase;
+      transition: color 0.2s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--accent-blue); transition: width 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--navy); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-blue);
+      margin-bottom: 0.75rem;
+    }
+    .section-title { font-size: 2.5rem; color: var(--navy); margin-bottom: 1rem; line-height: 1.2; }
+    .section-subtitle { font-size: 1.05rem; color: var(--text-light); max-width: 720px; margin-bottom: 3rem; }
+
+    /* Hero — fog-of-war themed */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at 30% 30%, rgba(69,165,232,0.15), transparent 50%),
+                  radial-gradient(ellipse at 70% 70%, rgba(153,224,255,0.1), transparent 50%),
+                  linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, #0a1628 100%);
+      position: relative; overflow: hidden; text-align: center; padding: 2rem;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 25% 35%, transparent 0, transparent 80px, rgba(0,0,0,0.5) 200px),
+                  radial-gradient(circle at 70% 60%, transparent 0, transparent 50px, rgba(0,0,0,0.5) 150px),
+                  radial-gradient(circle at 50% 80%, transparent 0, transparent 30px, rgba(0,0,0,0.5) 100px);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 820px; }
+    .hero-badge {
+      display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px;
+      background: rgba(69,165,232,0.18); color: var(--accent-cyan);
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 2rem; font-family: 'JetBrains Mono', monospace;
+    }
+    .hero h1 { font-size: 4.2rem; color: #fff; margin-bottom: 1.4rem; line-height: 1.05; letter-spacing: -0.02em; }
+    .hero h1 span { color: var(--accent-cyan); }
+    .hero-tagline { font-size: 1.25rem; color: rgba(255,255,255,0.78); font-style: italic; max-width: 620px; margin: 0 auto 1.2rem; }
+    .hero-desc { font-size: 1rem; color: rgba(255,255,255,0.62); max-width: 660px; margin: 0 auto 2.8rem; line-height: 1.85; }
+    .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; }
+    .hero-stat { text-align: center; }
+    .hero-stat .number { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: var(--accent-cyan); line-height: 1; }
+    .hero-stat .label { font-size: 0.74rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.5rem; }
+
+    .cards-grid { display: grid; gap: 1.5rem; }
+    .cards-grid.col-2 { grid-template-columns: repeat(2, 1fr); }
+    .cards-grid.col-3 { grid-template-columns: repeat(3, 1fr); }
+    .cards-grid.col-4 { grid-template-columns: repeat(4, 1fr); }
+    .card {
+      background: #fff; border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow); transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .card-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin-bottom: 1.2rem;
+    }
+    .card h3 { font-size: 1.15rem; color: var(--navy); margin-bottom: 0.55rem; }
+    .card p { font-size: 0.92rem; color: var(--text-light); line-height: 1.7; }
+
+    .icon-red { background: rgba(233,69,96,0.1); color: var(--coral); }
+    .icon-blue { background: rgba(69,165,232,0.12); color: var(--accent-blue); }
+    .icon-orange { background: rgba(243,156,18,0.1); color: var(--accent-orange); }
+    .icon-purple { background: rgba(155,89,182,0.1); color: var(--accent-purple); }
+    .icon-green { background: rgba(46,204,113,0.1); color: var(--accent-green); }
+    .icon-navy { background: rgba(26,26,46,0.06); color: var(--navy); }
+
+    .persona-tag {
+      display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 50px;
+      margin-bottom: 1rem;
+    }
+    .persona-primary .persona-tag { background: rgba(69,165,232,0.14); color: var(--accent-blue); }
+    .persona-secondary .persona-tag { background: rgba(46,204,113,0.12); color: var(--accent-green); }
+    .persona-tertiary .persona-tag { background: rgba(155,89,182,0.12); color: var(--accent-purple); }
+    .persona-card h3 { font-size: 1.25rem; }
+    .persona-card p { margin-bottom: 1rem; }
+    .persona-goals { list-style: none; padding: 0; }
+    .persona-goals li {
+      font-size: 0.88rem; color: var(--text); padding: 0.45rem 0 0.45rem 1.3rem;
+      position: relative; border-top: 1px dashed rgba(0,0,0,0.06);
+    }
+    .persona-goals li:first-child { border-top: none; }
+    .persona-goals li::before {
+      content: '\25B8'; position: absolute; left: 0; color: var(--accent-blue); font-weight: 700;
+    }
+
+    /* Journey */
+    .journey-flow { display: flex; align-items: stretch; gap: 0; margin-top: 2.5rem; }
+    .journey-step {
+      flex: 1; text-align: center; padding: 2rem 1.4rem;
+      background: var(--cream); border-radius: var(--radius); position: relative; margin: 0 1.2rem;
+    }
+    .journey-step::after {
+      content: '\2192'; position: absolute; right: -1.6rem; top: 50%;
+      transform: translateY(-50%); font-size: 1.5rem; color: var(--accent-blue); font-weight: 700;
+    }
+    .journey-step:last-child::after { display: none; }
+    .journey-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-blue); color: #fff; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; margin-bottom: 1rem;
+    }
+    .journey-step h4 { font-size: 1rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .journey-step p { font-size: 0.85rem; color: var(--text-light); }
+    .journey-pain {
+      margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed rgba(69,165,232,0.4);
+      font-size: 0.78rem; color: var(--accent-blue); font-weight: 500;
+    }
+
+    /* Stories */
+    .story-card {
+      background: #fff; border-radius: var(--radius); padding: 1.5rem 2rem;
+      border-left: 4px solid var(--accent-blue); margin-bottom: 1rem; box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .story-card:hover { transform: translateX(4px); box-shadow: var(--shadow-hover); }
+    .story-as { font-size: 0.74rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.08em; }
+    .story-want { font-size: 1.05rem; color: var(--navy); font-weight: 500; margin: 0.4rem 0; }
+    .story-so { font-size: 0.9rem; color: var(--text-light); }
+
+    /* Features */
+    .feature-card { position: relative; padding-top: 2.5rem; }
+    .feature-badge {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+    }
+    .badge-core { background: rgba(69,165,232,0.14); color: var(--accent-blue); }
+    .badge-render { background: rgba(155,89,182,0.12); color: var(--accent-purple); }
+    .badge-data { background: rgba(243,156,18,0.12); color: var(--accent-orange); }
+    .badge-game { background: rgba(46,204,113,0.12); color: var(--accent-green); }
+    .badge-share { background: rgba(233,69,96,0.12); color: var(--coral); }
+    .feature-metric {
+      margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(0,0,0,0.06);
+      font-size: 0.78rem; color: var(--text-light);
+    }
+    .feature-metric strong { color: var(--navy); font-size: 0.86rem; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+    /* Architecture */
+    .arch-diagram {
+      background: var(--cream); border-radius: var(--radius); padding: 3rem 2rem; margin-top: 2rem;
+    }
+    .arch-layer-label { text-align: center; margin-bottom: 0.7rem; }
+    .arch-layer-label span {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .arch-layer { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+    .arch-box {
+      padding: 0.85rem 1.2rem; border-radius: 10px; text-align: center;
+      font-size: 0.85rem; font-weight: 600; min-width: 150px; border: 2px solid;
+      background: #fff;
+    }
+    .arch-box small { display: block; font-weight: 400; font-size: 0.7rem; opacity: 0.78; margin-top: 0.25rem; font-family: 'JetBrains Mono', monospace; }
+    .arch-source { background: rgba(243,156,18,0.08); border-color: var(--accent-orange); color: var(--accent-orange); }
+    .arch-engine { background: rgba(155,89,182,0.08); border-color: var(--accent-purple); color: var(--accent-purple); }
+    .arch-store { background: rgba(46,204,113,0.08); border-color: var(--accent-green); color: var(--accent-green); }
+    .arch-render { background: rgba(69,165,232,0.08); border-color: var(--accent-blue); color: var(--accent-blue); }
+    .arch-ui { background: rgba(26,26,46,0.06); border-color: var(--navy); color: var(--navy); }
+    .arch-arrow { text-align: center; font-size: 1.2rem; color: var(--text-light); margin: 0.8rem 0; }
+    .arch-arrow-label { font-size: 0.72rem; color: var(--text-light); font-weight: 500; display: block; margin-top: 0.25rem; font-family: 'JetBrains Mono', monospace; }
+    .arch-connector { display: flex; align-items: center; gap: 0.5rem; color: var(--text-light); font-size: 1rem; font-weight: 700; }
+    .tech-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2.5rem; justify-content: center; }
+    .tech-badge {
+      padding: 0.4rem 0.95rem; border-radius: 50px; font-size: 0.76rem;
+      font-weight: 600; background: #fff; color: var(--navy); border: 1px solid rgba(26,26,46,0.1);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .insights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .insight-card { background: var(--cream); border-radius: var(--radius); padding: 1.5rem; border-left: 3px solid; }
+    .insight-card.i-blue { border-color: var(--accent-blue); }
+    .insight-card.i-purple { border-color: var(--accent-purple); }
+    .insight-card.i-green { border-color: var(--accent-green); }
+    .insight-card h4 { font-size: 0.88rem; color: var(--navy); margin-bottom: 0.4rem; font-family: 'DM Sans', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .insight-card p { font-size: 0.86rem; color: var(--text-light); }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    @media (max-width: 900px) {
+      .cards-grid.col-4 { grid-template-columns: repeat(2, 1fr); }
+      .cards-grid.col-3 { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.8rem; }
+      .section-title { font-size: 2rem; }
+      .journey-flow { flex-direction: column; gap: 1rem; }
+      .journey-step { margin: 0; }
+      .journey-step::after { content: '\2193'; right: 50%; top: auto; bottom: -1.4rem; transform: translateX(50%); }
+      .journey-step:last-child::after { display: none; }
+      .arch-layer { flex-direction: column; }
+      .arch-connector { transform: rotate(90deg); }
+      .insights-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .cards-grid.col-4, .cards-grid.col-2 { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.8rem; }
+      section { padding: 4rem 1.25rem; }
+      .hero h1 { font-size: 2.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">foot<span>print</span></a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#personas">Personas</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#stories">Stories</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">iOS · SwiftUI · MapKit</div>
+    <h1>foot<span>print</span></h1>
+    <p class="hero-tagline">"Walk the world, watch the fog lift."</p>
+    <p class="hero-desc">An iOS travel tracker that paints a dark fog over the entire world map and "punches through" only where you've actually been — by GPS, photo EXIF, or imported tile data. Then layers cyan-blue admin-region highlights for countries, US states &amp; counties, and Chinese 省/市/区县 on top. Tier-based achievements turn ordinary walks into a quiet game.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="number">4 tabs</div><div class="label">Map · Footprint · Achievements · Profile</div></div>
+      <div class="hero-stat"><div class="number">3 sources</div><div class="label">GPS · Photo · Import</div></div>
+      <div class="hero-stat"><div class="number">~170</div><div class="label">Countries via Natural Earth</div></div>
+      <div class="hero-stat"><div class="number">5 tiers</div><div class="label">Achievement Bands</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Problem -->
+<section style="background:#fff;" id="problem">
+  <div class="container">
+    <div class="section-label reveal">Problem Statement</div>
+    <h2 class="section-title reveal">Where you've actually been is invisible to your phone</h2>
+    <p class="section-subtitle reveal">Photo libraries hold the data, calendars hold the dates, but neither answers "what fraction of the world have I touched?" Existing fog-of-war apps are paid, dated, or locked to a single source — and none of them tell you that you've covered 17 of California's 58 counties.</p>
+    <div class="cards-grid col-4">
+      <div class="card reveal">
+        <div class="card-icon icon-blue">&#127757;</div>
+        <h3>Memory blurs by year</h3>
+        <p>You can recall 2024's trips but not 2018's stopovers. There's no surface in iOS that says "this is the shape of everywhere you've ever been."</p>
+      </div>
+      <div class="card reveal reveal-delay-1">
+        <div class="card-icon icon-orange">&#128247;</div>
+        <h3>Photos hold the data, hide it</h3>
+        <p>20,000 photos with EXIF GPS, but no way to extrude them onto a map and see coverage. Photo libraries are timelines, not atlases.</p>
+      </div>
+      <div class="card reveal reveal-delay-2">
+        <div class="card-icon icon-purple">&#128274;</div>
+        <h3>Locked into legacy apps</h3>
+        <p>Fog-of-World style apps own their tile format. Switch phones or apps and your years of walking dissolve. No graceful import path.</p>
+      </div>
+      <div class="card reveal reveal-delay-3">
+        <div class="card-icon icon-red">&#127942;</div>
+        <h3>Coverage is uncountable</h3>
+        <p>"Have I been to all 50 states?" needs a tally per admin region — countries, states, counties, 区县. Plain pin maps don't keep score.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Personas -->
+<section id="personas">
+  <div class="container">
+    <div class="section-label reveal">User Personas</div>
+    <h2 class="section-title reveal">Three travelers, one fog</h2>
+    <p class="section-subtitle reveal">The app serves three distinct relationships with travel: the collector chasing coverage, the local explorer gamifying daily walks, and the photo-library archaeologist back-filling years of memory.</p>
+    <div class="cards-grid col-3">
+      <div class="card persona-card persona-primary reveal">
+        <span class="persona-tag">Primary · Coverage Collector</span>
+        <h3>Frequent traveler</h3>
+        <p>Has been to 30+ countries and wants a single beautiful surface that proves it — and one that flatly tells them they're missing two US states and four Chinese provinces.</p>
+        <ul class="persona-goals">
+          <li>See country &amp; state totals at a glance</li>
+          <li>Drill down into US counties / 中国区县</li>
+          <li>Generate a 4:5 portrait poster to share</li>
+        </ul>
+      </div>
+      <div class="card persona-card persona-secondary reveal reveal-delay-1">
+        <span class="persona-tag">Secondary · Local Explorer</span>
+        <h3>Urban walker</h3>
+        <p>Doesn't fly often, but walks 5–15 km a day. Wants the fog peeling back tile-by-tile to reward "took a different route home" — exploration as quiet game.</p>
+        <ul class="persona-goals">
+          <li>Tile-level fog uncovered by GPS</li>
+          <li>Tier 1–5 achievements (50 → 25,000 tiles)</li>
+          <li>Smooth, jaggies-free zoom on city walks</li>
+        </ul>
+      </div>
+      <div class="card persona-card persona-tertiary reveal reveal-delay-2">
+        <span class="persona-tag">Tertiary · Archive Importer</span>
+        <h3>Photo archaeologist</h3>
+        <p>Has years of geo-tagged photos and a tile export from another fog app. Wants the map to reflect everywhere they've been, not just the days the new app was installed.</p>
+        <ul class="persona-goals">
+          <li>Backfill from photo library EXIF</li>
+          <li>Import tile sets from prior apps</li>
+          <li>Three sources merge into one fog overlay</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Journey -->
+<section style="background:#fff;" id="journey">
+  <div class="container">
+    <div class="section-label reveal">User Journey &amp; Pain Points</div>
+    <h2 class="section-title reveal">From dark map to shared poster in four steps</h2>
+    <p class="section-subtitle reveal">The first install opens onto an almost-entirely-dark world — the fog is the canvas. Every step from there is about getting more light through it, and the app provides three independent paths to do so.</p>
+    <div class="journey-flow reveal">
+      <div class="journey-step">
+        <div class="journey-num">1</div>
+        <h4>Open the fog</h4>
+        <p>First launch: a black world with one bright punch where you stand. The contrast does the marketing — the user immediately wants more lit pixels.</p>
+        <div class="journey-pain">Pain: cold-start map looks "empty"</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">2</div>
+        <h4>Backfill history</h4>
+        <p>Import photo EXIF locations and tile dumps from prior apps. Three independent sources merge into one fog index.</p>
+        <div class="journey-pain">Pain: legacy app lock-in</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">3</div>
+        <h4>Switch to Footprint</h4>
+        <p>Tap the second tab: cyan-blue fills appear over visited countries / states / counties / 省 / 市 / 区县. The picker chips show which scope.</p>
+        <div class="journey-pain">Pain: needs admin-region progress, not pins</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">4</div>
+        <h4>Earn &amp; share</h4>
+        <p>Achievements unlock at 1 / 50 / 200 / 1k / 5k / 25k tiles and 1 / 10 / 25 / 50 / 100 countries. Generate a 4:5 poster and post it.</p>
+        <div class="journey-pain">Pain: travel sharing is awkward without a polished export</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stories -->
+<section id="stories">
+  <div class="container">
+    <div class="section-label reveal">User Stories</div>
+    <h2 class="section-title reveal">What each persona needs</h2>
+    <p class="section-subtitle reveal">Five stories spanning all three personas, each landing on a specific feature in the app.</p>
+    <div class="reveal">
+      <div class="story-card">
+        <div class="story-as">As a coverage collector</div>
+        <div class="story-want">I want to see how many of California's 58 counties I've actually visited</div>
+        <div class="story-so">so that "I've been to California" becomes a measurable percentage instead of a blur.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">As an urban walker</div>
+        <div class="story-want">I want the fog to peel back smoothly with no pixel jaggies when I zoom into my city</div>
+        <div class="story-so">so that walking a new street looks visually delightful, not stair-stepped.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">As a photo archaeologist</div>
+        <div class="story-want">I want to import my entire photo library's GPS data in one pass</div>
+        <div class="story-so">so that the map reflects 10 years of travel, not 10 days since I installed the app.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">As a Chinese user</div>
+        <div class="story-want">I want to switch to China and pick scope between 省 / 市 / 区县</div>
+        <div class="story-so">so that I can see I've covered Beijing's districts but missed half of 上海的区.</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">As a coverage collector</div>
+        <div class="story-want">I want a 4:5 portrait poster of my map with stats baked in</div>
+        <div class="story-so">so that I can post a "year in travel" image without screenshotting and cropping.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section style="background:#fff;" id="features">
+  <div class="container">
+    <div class="section-label reveal">Features &amp; Capabilities</div>
+    <h2 class="section-title reveal">Six capabilities, one consistent visual language</h2>
+    <p class="section-subtitle reveal">The visual identity is borrowed directly from <code>FootprintView</code>: a single saturated cyan-blue (<code>#45A5E8</code>) for fills, a brighter cyan stroke (<code>#99E0FF</code>) for separation. One color across all admin levels keeps focus on "where" not "what zoom".</p>
+    <div class="cards-grid col-3">
+      <div class="card feature-card reveal">
+        <span class="feature-badge badge-render">RENDER</span>
+        <div class="card-icon icon-purple">&#128302;</div>
+        <h3>Adaptive fog overlay</h3>
+        <p>Hard pixel rects below slippy zoom 15.5 (fast, jaggies invisible at city scale); above, switches to a pre-blurred soft-punch sprite blitted with <code>destinationOut</code>. Per-frame cost scales with what's visible, not total tiles owned.</p>
+        <div class="feature-metric"><strong>core_frac &ge; 0.68</strong> · 256² premultiplied · σ=16 blur</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-1">
+        <span class="feature-badge badge-data">SOURCES</span>
+        <div class="card-icon icon-orange">&#128205;</div>
+        <h3>Three-source ingestion</h3>
+        <p>GPS (live <code>LocationManager</code>), photo EXIF (<code>PhotoImporter</code>), and tile import from prior fog apps (<code>FogImporter</code>). Each source has its own coarse spatial index; renderer iterates all three.</p>
+        <div class="feature-metric"><strong>idempotent</strong> · destinationOut blend handles overlap</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-2">
+        <span class="feature-badge badge-core">FOOTPRINT</span>
+        <div class="card-icon icon-blue">&#127760;</div>
+        <h3>Admin-region highlight</h3>
+        <p>Cyan fills over visited countries · US states &amp; counties · China 省/市/区县 · 170+ other countries' admin1 via Natural Earth shards. Picker chips pick country and scope.</p>
+        <div class="feature-metric"><strong>fill</strong> #45A5E8 · <strong>stroke</strong> #99E0FF (Amap-style)</div>
+      </div>
+      <div class="card feature-card reveal">
+        <span class="feature-badge badge-game">ACHIEVE</span>
+        <div class="card-icon icon-green">&#127942;</div>
+        <h3>Tiered achievements</h3>
+        <p>Five categories (Exploration, World, US States, CA Counties, Milestones) with five visual tiers. Closure-based progress: <code>(LocationManager) -&gt; Double</code>. Unlock thresholds: 1 / 50 / 200 / 1k / 5k / 25k tiles.</p>
+        <div class="feature-metric"><strong>Tiered styling</strong> · 1 (mint) → 5 (purple)</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-1">
+        <span class="feature-badge badge-share">SHARE</span>
+        <div class="card-icon icon-red">&#128444;</div>
+        <h3>Poster generator</h3>
+        <p>4:5 portrait canvas optimized layout (separate from map's interactive region). <code>FootprintPosterGenerator</code> renders region camera-fit using NE label_x/y anchors so France's centroid doesn't land in the Atlantic.</p>
+        <div class="feature-metric"><strong>label_x/y anchored</strong> · main-landmass center</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-2">
+        <span class="feature-badge badge-core">L10N</span>
+        <div class="card-icon icon-navy">&#127464;&#127475;</div>
+        <h3>Localized scopes</h3>
+        <p>String catalog (<code>Localizable.xcstrings</code>) handles World/US/China; ~170 country names defer to Natural Earth's <code>name_en</code> rather than maintaining a client-side translation table.</p>
+        <div class="feature-metric"><strong>xcstrings</strong> · NE name_en fallback</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label reveal">Technical Architecture</div>
+    <h2 class="section-title reveal">System design &amp; data flow</h2>
+    <p class="section-subtitle reveal">Five layers: ingestion → engine → store → render → UI. The renderer is the hot path — every layer above optimizes for "give the renderer a coarse spatial index, fast." Everything is on-device; no backend.</p>
+
+    <div class="arch-diagram reveal">
+      <div class="arch-layer-label"><span style="color: var(--accent-orange);">Ingestion · Three Sources</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-source">LocationManager<br><small>CoreLocation · live GPS</small></div>
+        <div class="arch-connector">+</div>
+        <div class="arch-box arch-source">PhotoImporter<br><small>PhotosUI · EXIF GPS</small></div>
+        <div class="arch-connector">+</div>
+        <div class="arch-box arch-source">FogImporter<br><small>tile dump from prior apps</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">visited tile sets · disjoint and overlapping</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--accent-purple);">Engine · Geometry &amp; Matching</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-engine">PolygonMatcher<br><small>point-in-polygon</small></div>
+        <div class="arch-connector">&rarr;</div>
+        <div class="arch-box arch-engine">GeoJSON Decoder<br><small>Polygon ↔ MultiPolygon</small></div>
+        <div class="arch-connector">&rarr;</div>
+        <div class="arch-box arch-engine">AdminCodes &middot; CountryCodes<br><small>FIPS · ISO 3166-1 alpha-2</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">visited admin IDs · countries / states / counties / 区县</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--accent-green);">Store · LocationManager state</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-store">visitedTilesCount<br><small>tile counter</small></div>
+        <div class="arch-connector">&middot;</div>
+        <div class="arch-box arch-store">visitedCountries<br><small>ISO set</small></div>
+        <div class="arch-connector">&middot;</div>
+        <div class="arch-box arch-store">visited admin IDs<br><small>states · counties · 区县</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">@StateObject · environmentObject</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--accent-blue);">Render · MapKit Overlays</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-render">FogOverlay<br><small>boundingMapRect = .world</small></div>
+        <div class="arch-connector">&rarr;</div>
+        <div class="arch-box arch-render">FogOverlayRenderer<br><small>3 coarse tile indexes</small></div>
+        <div class="arch-connector">&rarr;</div>
+        <div class="arch-box arch-render">Footprint Polygons<br><small>cyan-blue fill + cyan stroke</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">SwiftUI TabView · 4 tabs</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--navy);">UI · SwiftUI Surfaces</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-ui">MapView<br><small>fog interactive</small></div>
+        <div class="arch-connector">&middot;</div>
+        <div class="arch-box arch-ui">FootprintView<br><small>admin-region picker</small></div>
+        <div class="arch-connector">&middot;</div>
+        <div class="arch-box arch-ui">AchievementView<br><small>tiered catalog</small></div>
+        <div class="arch-connector">&middot;</div>
+        <div class="arch-box arch-ui">PosterPreviewView<br><small>4:5 export</small></div>
+      </div>
+
+      <div class="tech-badges">
+        <span class="tech-badge">SwiftUI</span>
+        <span class="tech-badge">MapKit</span>
+        <span class="tech-badge">CoreLocation</span>
+        <span class="tech-badge">CoreImage</span>
+        <span class="tech-badge">PhotosUI</span>
+        <span class="tech-badge">UIKit bridge</span>
+        <span class="tech-badge">GeoJSON</span>
+        <span class="tech-badge">Natural Earth</span>
+        <span class="tech-badge">xcstrings · L10n</span>
+      </div>
+    </div>
+
+    <div class="insights-grid">
+      <div class="insight-card i-blue reveal">
+        <h4>Performance</h4>
+        <p>MKMapView culls off-screen overlays automatically — per-frame cost scales with viewport, not lifetime tile count. Soft-punch is one Core Image blur amortized over the app's lifetime; per-frame draw is a texture blit.</p>
+      </div>
+      <div class="insight-card i-purple reveal reveal-delay-1">
+        <h4>Visual fidelity</h4>
+        <p>Two render modes split at slippy zoom 15.5: hard rects below (fast, jaggies invisible at ~5km screen width), soft sprite above (slow but smooth). Geometry tuned so the sprite's solid core covers diagonal neighbors at zoom 19.</p>
+      </div>
+      <div class="insight-card i-green reveal reveal-delay-2">
+        <h4>Scaling to all countries</h4>
+        <p>Curated paths for World/US/China; <code>.other(ISO)</code> falls through to a generic admin1 path backed by per-country Natural Earth shards. Adding a new country is a data drop — no code change.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="text-align:center;padding:3rem 2rem;background:var(--navy);color:rgba(255,255,255,0.45);font-size:0.85rem;">
+  <p>footprint &mdash; Product Portfolio</p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;color:rgba(255,255,255,0.3);font-family:'JetBrains Mono',monospace;">walk &rarr; uncover &rarr; collect &rarr; share &mdash; the fog is the canvas.</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id'); });
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+  });
+</script>
+</body>
+</html>

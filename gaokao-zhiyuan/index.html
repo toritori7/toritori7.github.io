@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高考志愿助手 — Product Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1a1a2e;
+      --navy-light: #16213e;
+      --coral: #e94560;
+      --coral-light: #ff6b6b;
+      --cream: #f8f6f2;
+      --cream-dark: #eee9e0;
+      --text: #2d2d3a;
+      --text-light: #6b6b7b;
+      --accent-blue: #4a90d9;
+      --accent-green: #2ecc71;
+      --accent-purple: #9b59b6;
+      --accent-orange: #f39c12;
+      --shadow: 0 4px 20px rgba(26, 26, 46, 0.08);
+      --shadow-hover: 0 8px 30px rgba(26, 26, 46, 0.15);
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
+      color: var(--text); background: var(--cream); line-height: 1.7;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-family: 'DM Serif Display', 'Noto Serif SC', serif; font-weight: 400; }
+
+    /* Navigation */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(248, 246, 242, 0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 26, 46, 0.06); padding: 0 2rem;
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .nav-logo { font-family: 'DM Serif Display', 'Noto Serif SC', serif; font-size: 1.25rem; color: var(--navy); text-decoration: none; }
+    .nav-logo span { color: var(--coral); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-light); font-size: 0.85rem;
+      font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase;
+      transition: color 0.2s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--coral); transition: width 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--navy); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+    /* Sections */
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-family: 'DM Sans', 'Noto Sans SC', sans-serif; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--coral);
+      margin-bottom: 0.75rem;
+    }
+    .section-title { font-size: 2.5rem; color: var(--navy); margin-bottom: 1rem; line-height: 1.25; }
+    .section-subtitle { font-size: 1.1rem; color: var(--text-light); max-width: 720px; margin-bottom: 3rem; }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, #0f3460 100%);
+      position: relative; overflow: hidden; text-align: center; padding: 2rem;
+    }
+    .hero::before {
+      content: ''; position: absolute; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(233,69,96,0.18), transparent 70%);
+      top: -100px; right: -100px; border-radius: 50%;
+    }
+    .hero::after {
+      content: ''; position: absolute; width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(74,144,217,0.12), transparent 70%);
+      bottom: -150px; left: -100px; border-radius: 50%;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 820px; }
+    .hero-badge {
+      display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px;
+      background: rgba(233,69,96,0.15); color: var(--coral-light);
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .hero h1 { font-size: 4rem; color: #fff; margin-bottom: 1.5rem; line-height: 1.15; }
+    .hero h1 span { color: var(--coral-light); }
+    .hero-tagline { font-size: 1.3rem; color: rgba(255,255,255,0.78); font-style: italic; max-width: 620px; margin: 0 auto 1.2rem; }
+    .hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 auto 2.8rem; line-height: 1.8; }
+    .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; }
+    .hero-stat { text-align: center; }
+    .hero-stat .number { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--coral-light); line-height: 1; }
+    .hero-stat .label { font-size: 0.78rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.4rem; }
+
+    /* Cards */
+    .cards-grid { display: grid; gap: 1.5rem; }
+    .cards-grid.col-2 { grid-template-columns: repeat(2, 1fr); }
+    .cards-grid.col-3 { grid-template-columns: repeat(3, 1fr); }
+    .cards-grid.col-4 { grid-template-columns: repeat(4, 1fr); }
+    .card {
+      background: #fff; border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow); transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .card-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1.25rem;
+    }
+    .card h3 { font-size: 1.15rem; color: var(--navy); margin-bottom: 0.6rem; }
+    .card p { font-size: 0.92rem; color: var(--text-light); line-height: 1.7; }
+
+    .icon-red { background: rgba(233,69,96,0.1); color: var(--coral); }
+    .icon-blue { background: rgba(74,144,217,0.1); color: var(--accent-blue); }
+    .icon-orange { background: rgba(243,156,18,0.1); color: var(--accent-orange); }
+    .icon-purple { background: rgba(155,89,182,0.1); color: var(--accent-purple); }
+    .icon-green { background: rgba(46,204,113,0.1); color: var(--accent-green); }
+
+    /* Persona */
+    .persona-card { position: relative; }
+    .persona-tag {
+      display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 50px;
+      margin-bottom: 1rem;
+    }
+    .persona-primary .persona-tag { background: rgba(233,69,96,0.12); color: var(--coral); }
+    .persona-secondary .persona-tag { background: rgba(74,144,217,0.12); color: var(--accent-blue); }
+    .persona-tertiary .persona-tag { background: rgba(155,89,182,0.12); color: var(--accent-purple); }
+    .persona-card h3 { font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .persona-card p { margin-bottom: 1rem; }
+    .persona-goals { list-style: none; padding: 0; }
+    .persona-goals li {
+      font-size: 0.88rem; color: var(--text); padding: 0.4rem 0 0.4rem 1.2rem;
+      position: relative; border-top: 1px dashed rgba(0,0,0,0.06);
+    }
+    .persona-goals li:first-child { border-top: none; }
+    .persona-goals li::before {
+      content: '\2713'; position: absolute; left: 0; color: var(--coral); font-weight: 700;
+    }
+
+    /* Journey */
+    .journey-flow { display: flex; align-items: stretch; gap: 0; margin-top: 2.5rem; }
+    .journey-step {
+      flex: 1; text-align: center; padding: 2rem 1.4rem;
+      background: var(--cream); border-radius: var(--radius); position: relative; margin: 0 1.2rem;
+    }
+    .journey-step::after {
+      content: '\2192'; position: absolute; right: -1.6rem; top: 50%;
+      transform: translateY(-50%); font-size: 1.5rem; color: var(--coral); font-weight: 700;
+    }
+    .journey-step:last-child::after { display: none; }
+    .journey-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--coral); color: #fff; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; margin-bottom: 1rem;
+    }
+    .journey-step h4 { font-size: 1rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .journey-step p { font-size: 0.85rem; color: var(--text-light); }
+    .journey-pain {
+      margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed rgba(233,69,96,0.3);
+      font-size: 0.78rem; color: var(--coral); font-weight: 500;
+    }
+
+    /* User Stories */
+    .story-card {
+      background: #fff; border-radius: var(--radius); padding: 1.5rem 2rem;
+      border-left: 4px solid var(--coral); margin-bottom: 1rem; box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .story-card:hover { transform: translateX(4px); box-shadow: var(--shadow-hover); }
+    .story-as { font-size: 0.75rem; font-weight: 700; color: var(--coral); text-transform: uppercase; letter-spacing: 0.08em; }
+    .story-want { font-size: 1.05rem; color: var(--navy); font-weight: 500; margin: 0.4rem 0; }
+    .story-so { font-size: 0.9rem; color: var(--text-light); }
+
+    /* Features */
+    .feature-card { position: relative; padding-top: 2.5rem; }
+    .feature-badge {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border-radius: 4px;
+    }
+    .badge-core { background: rgba(233,69,96,0.12); color: var(--coral); }
+    .badge-ai { background: rgba(155,89,182,0.12); color: var(--accent-purple); }
+    .badge-ux { background: rgba(74,144,217,0.12); color: var(--accent-blue); }
+    .badge-rev { background: rgba(46,204,113,0.12); color: var(--accent-green); }
+    .feature-metric {
+      margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(0,0,0,0.06);
+      font-size: 0.78rem; color: var(--text-light);
+    }
+    .feature-metric strong { color: var(--navy); font-size: 0.9rem; }
+
+    /* Architecture */
+    .arch-diagram {
+      background: var(--cream); border-radius: var(--radius); padding: 3rem 2rem; margin-top: 2rem;
+    }
+    .arch-layer-label {
+      text-align: center; margin-bottom: 0.7rem;
+    }
+    .arch-layer-label span {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .arch-layer { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+    .arch-box {
+      padding: 0.85rem 1.2rem; border-radius: 10px; text-align: center;
+      font-size: 0.85rem; font-weight: 600; min-width: 140px; border: 2px solid;
+      background: #fff;
+    }
+    .arch-box small { display: block; font-weight: 400; font-size: 0.7rem; opacity: 0.75; margin-top: 0.2rem; }
+    .arch-scraper { background: rgba(243,156,18,0.08); border-color: var(--accent-orange); color: var(--accent-orange); }
+    .arch-ai { background: rgba(155,89,182,0.08); border-color: var(--accent-purple); color: var(--accent-purple); }
+    .arch-db { background: rgba(46,204,113,0.08); border-color: var(--accent-green); color: var(--accent-green); }
+    .arch-app { background: rgba(74,144,217,0.08); border-color: var(--accent-blue); color: var(--accent-blue); }
+    .arch-user { background: rgba(26,26,46,0.06); border-color: var(--navy); color: var(--navy); }
+    .arch-arrow { text-align: center; font-size: 1.2rem; color: var(--text-light); margin: 0.8rem 0; }
+    .arch-arrow-label { font-size: 0.72rem; color: var(--text-light); font-weight: 500; display: block; margin-top: 0.25rem; }
+    .arch-connector { display: flex; align-items: center; gap: 0.5rem; color: var(--text-light); font-size: 1rem; font-weight: 700; }
+    .tech-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2.5rem; justify-content: center; }
+    .tech-badge {
+      padding: 0.4rem 0.95rem; border-radius: 50px; font-size: 0.78rem;
+      font-weight: 600; background: #fff; color: var(--navy); border: 1px solid rgba(26,26,46,0.1);
+    }
+
+    .insights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .insight-card { background: var(--cream); border-radius: var(--radius); padding: 1.5rem; border-left: 3px solid; }
+    .insight-card.i-coral { border-color: var(--coral); }
+    .insight-card.i-blue { border-color: var(--accent-blue); }
+    .insight-card.i-green { border-color: var(--accent-green); }
+    .insight-card h4 { font-size: 0.9rem; color: var(--navy); margin-bottom: 0.4rem; font-family: 'DM Sans', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .insight-card p { font-size: 0.85rem; color: var(--text-light); }
+
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .cards-grid.col-4 { grid-template-columns: repeat(2, 1fr); }
+      .cards-grid.col-3 { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.6rem; }
+      .section-title { font-size: 2rem; }
+      .journey-flow { flex-direction: column; gap: 1rem; }
+      .journey-step { margin: 0; }
+      .journey-step::after { content: '\2193'; right: 50%; top: auto; bottom: -1.4rem; transform: translateX(50%); }
+      .journey-step:last-child::after { display: none; }
+      .arch-layer { flex-direction: column; }
+      .arch-connector { transform: rotate(90deg); }
+      .insights-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .cards-grid.col-4, .cards-grid.col-2 { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.8rem; }
+      section { padding: 4rem 1.25rem; }
+      .hero h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">高考志愿<span>助手</span></a>
+    <ul class="nav-links">
+      <li><a href="#problem">问题</a></li>
+      <li><a href="#personas">用户</a></li>
+      <li><a href="#journey">流程</a></li>
+      <li><a href="#stories">故事</a></li>
+      <li><a href="#features">功能</a></li>
+      <li><a href="#architecture">架构</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">PM Portfolio · 2026</div>
+    <h1>高考志愿<span>助手</span></h1>
+    <p class="hero-tagline">"AI + 真人学长，让每一个高考生都能做出不后悔的志愿选择"</p>
+    <p class="hero-desc">面向 1,350 万高考考生与家庭的志愿填报平台。免费 AI 工具承接出分日刚需流量，付费学长 1v1 咨询提供深度服务。在张雪峰之后的市场真空里，用普惠定价重新定义志愿咨询。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="number">1,350万</div><div class="label">年高考考生</div></div>
+      <div class="hero-stat"><div class="number">18,000+</div><div class="label">条录取数据</div></div>
+      <div class="hero-stat"><div class="number">¥99–299</div><div class="label">学长咨询单价</div></div>
+      <div class="hero-stat"><div class="number">1/100</div><div class="label">vs 万元咨询</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Problem -->
+<section style="background:#fff;" id="problem">
+  <div class="container">
+    <div class="section-label reveal">Problem Statement</div>
+    <h2 class="section-title reveal">志愿填报，是一场信息严重不对称的高代价博弈</h2>
+    <p class="section-subtitle reveal">每年 6 月，1,000 万家庭要在 2-3 周内完成一个影响一生的决定。市面上的解决方案要么贵到离谱，要么数据不准；张雪峰之后，连最贵的那条路也失去了核心 IP。</p>
+    <div class="cards-grid col-4">
+      <div class="card reveal">
+        <div class="card-icon icon-red">&#165;</div>
+        <h3>付费门槛过高</h3>
+        <p>张雪峰套餐 ¥9,999–17,999，AI 工具 ¥300–600 起步，把 70% 的家庭直接挡在门外。</p>
+      </div>
+      <div class="card reveal reveal-delay-1">
+        <div class="card-icon icon-orange">&#9888;</div>
+        <h3>数据与体验割裂</h3>
+        <p>夸克概率不准，掌上高考 UI 老旧，优志愿被 upsell 反噬。没有一个工具能把测评 → 推荐 → 深聊串成完整体验。</p>
+      </div>
+      <div class="card reveal reveal-delay-2">
+        <div class="card-icon icon-purple">&#9733;</div>
+        <h3>张雪峰之后的真空</h3>
+        <p>2,800 万抖音粉丝、市场最强信任 IP 离场。家长群体的核心需求"有人告诉我该怎么选"无人承接。</p>
+      </div>
+      <div class="card reveal reveal-delay-3">
+        <div class="card-icon icon-blue">&#8651;</div>
+        <h3>家长与孩子的分歧</h3>
+        <p>"你想学游戏设计，你妈让你学金融"——一个家庭两个决策者，没有任何工具帮他们达成共识。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Personas -->
+<section id="personas">
+  <div class="container">
+    <div class="section-label reveal">User Personas</div>
+    <h2 class="section-title reveal">为谁而做：考生、家长、学长</h2>
+    <p class="section-subtitle reveal">这是一个供需两端都需要服务的双边市场。需求端是焦虑的考生与家庭，供给端是名校在读学长——他们既是顾问，也是品牌信任的来源。</p>
+    <div class="cards-grid col-3">
+      <div class="card persona-card persona-primary reveal">
+        <span class="persona-tag">主要用户</span>
+        <h3>高三考生 · 小宇</h3>
+        <p>620 分湖北考生，文科理科都还行，听说计算机赚钱但其实喜欢传媒。父母不让做主，自己也不知道选啥。</p>
+        <ul class="persona-goals">
+          <li>出分日 3 秒看到能上的学校列表</li>
+          <li>知道某个专业"在大学里到底学啥"</li>
+          <li>找一个真实的学长聊聊，不是中介</li>
+        </ul>
+      </div>
+      <div class="card persona-card persona-secondary reveal reveal-delay-1">
+        <span class="persona-tag">家长用户</span>
+        <h3>焦虑家长 · 王妈妈</h3>
+        <p>孩子高三第一次高考，家庭年收入有限，舍不得掏 1 万咨询费，但又害怕志愿填错耽误一辈子。</p>
+        <ul class="persona-goals">
+          <li>用百元级预算获得专业建议</li>
+          <li>和孩子达成志愿选择共识</li>
+          <li>看到名校学长的真实就业现实</li>
+        </ul>
+      </div>
+      <div class="card persona-card persona-tertiary reveal reveal-delay-2">
+        <span class="persona-tag">供给端</span>
+        <h3>名校学长 · 清华大四在读</h3>
+        <p>大四闲暇时间多，想做点有意义且能赚钱的事。不想做家教，但乐意分享自己的专业经历。</p>
+        <ul class="persona-goals">
+          <li>每单 ¥70–140 灵活接单</li>
+          <li>不需要备课，聊真实经历即可</li>
+          <li>积累志愿咨询经验与口碑</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Journey -->
+<section style="background:#fff;" id="journey">
+  <div class="container">
+    <div class="section-label reveal">User Journey & Pain Points</div>
+    <h2 class="section-title reveal">从出分焦虑到下志愿表的 4 步</h2>
+    <p class="section-subtitle reveal">出分日是漏斗的最大入口。免费工具把陌生流量转化为注册用户，AI 对话沉淀深度需求，最后由学长 1v1 完成转化。每一步都对应一个具体的痛点。</p>
+    <div class="journey-flow reveal">
+      <div class="journey-step">
+        <div class="journey-num">1</div>
+        <h4>出分焦虑</h4>
+        <p>查到分数的那一瞬间，1,000 万家庭同时打开手机，不知道这个分数能上什么。</p>
+        <div class="journey-pain">痛点：3 秒决定打开哪个 App</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">2</div>
+        <h4>冲稳保推荐</h4>
+        <p>输入省份、分数、选科，立刻拿到三档院校列表（基于真实录取数据）。</p>
+        <div class="journey-pain">痛点：竞品概率不准、UI 慢</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">3</div>
+        <h4>AI 深度对话</h4>
+        <p>有具体院校后，问"清华计算机到底怎么样"——AI 给出专业、就业、城市的多维分析。</p>
+        <div class="journey-pain">痛点：通用 AI 没有行业数据</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">4</div>
+        <h4>学长 1v1 咨询</h4>
+        <p>问到深处转向学长预约：30 分钟微信语音，直接听过来人怎么说。</p>
+        <div class="journey-pain">痛点：信任 = 真实经历</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stories -->
+<section id="stories">
+  <div class="container">
+    <div class="section-label reveal">User Stories</div>
+    <h2 class="section-title reveal">用户到底要完成什么</h2>
+    <p class="section-subtitle reveal">从需求侧的考生与家长，到供给侧的学长，每个角色都有具体要被满足的任务。</p>
+    <div class="reveal">
+      <div class="story-card">
+        <div class="story-as">作为 高三考生</div>
+        <div class="story-want">我想 输入分数立刻看到冲/稳/保三档院校列表</div>
+        <div class="story-so">这样 我能在出分当天就开始规划，不再在 30+ 个 App 之间反复横跳。</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">作为 焦虑家长</div>
+        <div class="story-want">我想 用百元预算约一次清华学长的 1v1 咨询</div>
+        <div class="story-so">这样 我不必花 1 万元找张雪峰团队，也能听到名校在读生的真实建议。</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">作为 高三考生与家长</div>
+        <div class="story-want">我们想 各自独立做一份测评，看到双方的差异在哪</div>
+        <div class="story-so">这样 我们能在饭桌上少吵一个月，把分歧变成可以讨论的具体选项。</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">作为 迷茫的考生</div>
+        <div class="story-want">我想 用左右滑卡片快速比较专业，最后得到一份"志愿人格"</div>
+        <div class="story-so">这样 选专业不再是 30 道严肃问卷，而是 5 分钟就能完成的轻量游戏，还能发朋友圈。</div>
+      </div>
+      <div class="story-card">
+        <div class="story-as">作为 清华在读学长</div>
+        <div class="story-want">我想 把空闲时间变成每单 ¥70–140 的真实收入</div>
+        <div class="story-so">这样 我不用备课、不用应付陌生人，就靠分享自己的真实专业经历挣零花钱。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section style="background:#fff;" id="features">
+  <div class="container">
+    <div class="section-label reveal">Features &amp; Demo</div>
+    <h2 class="section-title reveal">免费工具承接流量，付费学长承接转化</h2>
+    <p class="section-subtitle reveal">产品矩阵分三层：获客（AI 对话 / 冲稳保 / 测评）、留存（完整报告 / 各省对比）、变现（学长咨询 / 全程辅导包）。每一层都有清晰的引流到下一层的钩子。</p>
+    <div class="cards-grid col-3">
+      <div class="card feature-card reveal">
+        <span class="feature-badge badge-ai">AI</span>
+        <div class="card-icon icon-purple">&#128172;</div>
+        <h3>AI 志愿对话</h3>
+        <p>基于 Claude Haiku + 录取数据 RAG，覆盖专业介绍、分数查询、就业前景、选科建议。注册前 20 轮 / 注册后 50 轮。</p>
+        <div class="feature-metric"><strong>转化钩子：</strong> "想听清华学长亲口说？点这里"</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-1">
+        <span class="feature-badge badge-core">CORE</span>
+        <div class="card-icon icon-red">&#9889;</div>
+        <h3>冲/稳/保推荐</h3>
+        <p>输入省份+分数+选科，3 秒生成三档院校列表。基于 18,000+ 条 2024 湖北省专业级录取数据，扩展中。</p>
+        <div class="feature-metric"><strong>目标 SLA：</strong> 出分日 3 秒出结果</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-2">
+        <span class="feature-badge badge-ux">UX</span>
+        <div class="card-icon icon-orange">&#10084;</div>
+        <h3>专业 PK 测评</h3>
+        <p>Tinder 式左右滑卡片 + 场景题 + 硬性条件，5 分钟生成"志愿人格"标签和匹配专业。带分享图，K 因子 0.6–1.2。</p>
+        <div class="feature-metric"><strong>设计原则：</strong> 滑动让人上瘾不退出</div>
+      </div>
+      <div class="card feature-card reveal">
+        <span class="feature-badge badge-ux">UX</span>
+        <div class="card-icon icon-blue">&#9794;&#9792;</div>
+        <h3>家长 vs 孩子对比</h3>
+        <p>家长和孩子各自独立测评，可视化展示双方差异。一次场景天然触达两个用户，K 因子 1.5–2.0。</p>
+        <div class="feature-metric"><strong>传播力：</strong> 双倍传播 + 家长群天然分发</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-1">
+        <span class="feature-badge badge-rev">REVENUE</span>
+        <div class="card-icon icon-green">&#127891;</div>
+        <h3>学长 1v1 咨询</h3>
+        <p>30 分钟微信语音/视频。按学校层级与学长等级浮动定价：清北 ¥199、华五 ¥149、其他 985 ¥99。学长拿 70%。</p>
+        <div class="feature-metric"><strong>护城河：</strong> 学长网络 ≠ 数据，难以复制</div>
+      </div>
+      <div class="card feature-card reveal reveal-delay-2">
+        <span class="feature-badge badge-rev">REVENUE</span>
+        <div class="card-icon icon-purple">&#127942;</div>
+        <h3>志愿全程辅导包</h3>
+        <p>1 次完整测评 + 2 次学长咨询 + 1 份定制方案 + 填报期答疑。¥599–999，瞄准中高分纠结家庭。</p>
+        <div class="feature-metric"><strong>对标：</strong> 张雪峰 ¥9,999 套餐的 1/10 价</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label reveal">Technical Architecture</div>
+    <h2 class="section-title reveal">系统设计与数据流</h2>
+    <p class="section-subtitle reveal">架构围绕"出分日 3 秒响应 + 1,000 万峰值流量"两个约束设计。数据层先于应用层就绪，AI 层用 Haiku 控成本，前端 SSR 保证首屏。</p>
+
+    <div class="arch-diagram reveal">
+      <div class="arch-layer-label"><span style="color: var(--accent-orange);">数据采集层 · Data Pipeline</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-scraper">掌上高考 API<br><small>录取分数+位次</small></div>
+        <div class="arch-connector">+</div>
+        <div class="arch-box arch-scraper">阳光高考爬虫<br><small>教育部官方数据</small></div>
+        <div class="arch-connector">+</div>
+        <div class="arch-box arch-scraper">省考试院 PDF<br><small>一分一段表</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">原始招录数据 · 18,000+ 条/省</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--accent-purple);">处理层 · AI &amp; Processing</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-ai">数据清洗<br><small>Python ETL</small></div>
+        <div class="arch-connector">&rarr;</div>
+        <div class="arch-box arch-ai">冲稳保算法<br><small>位次匹配</small></div>
+        <div class="arch-connector">&rarr;</div>
+        <div class="arch-box arch-ai">RAG 检索<br><small>本地数据增强</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">结构化数据 + LLM 上下文</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--accent-green);">存储层 · Storage</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-db">招录数据库<br><small>院校 / 专业 / 年份</small></div>
+        <div class="arch-connector">&middot;</div>
+        <div class="arch-box arch-db">用户与会话<br><small>对话历史 / 测评结果</small></div>
+        <div class="arch-connector">&middot;</div>
+        <div class="arch-box arch-db">学长档案<br><small>身份验证 / 评分</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">REST API · FastAPI</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--accent-blue);">应用层 · Application</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-app">FastAPI 后端<br><small>chat / recommend / booking</small></div>
+        <div class="arch-connector">&harr;</div>
+        <div class="arch-box arch-app">Claude Haiku<br><small>对话生成</small></div>
+        <div class="arch-connector">&harr;</div>
+        <div class="arch-box arch-app">Next.js 前端<br><small>SSR + Tailwind</small></div>
+      </div>
+
+      <div class="arch-arrow">&darr;<span class="arch-arrow-label">HTTPS · Vercel + Render</span></div>
+
+      <div class="arch-layer-label"><span style="color: var(--navy);">用户层 · Users</span></div>
+      <div class="arch-layer">
+        <div class="arch-box arch-user">考生 / 家长<br><small>Web + 公众号</small></div>
+        <div class="arch-connector">&harr;</div>
+        <div class="arch-box arch-user">学长后台<br><small>接单 / 评价</small></div>
+      </div>
+
+      <div class="tech-badges">
+        <span class="tech-badge">Next.js</span>
+        <span class="tech-badge">TypeScript</span>
+        <span class="tech-badge">Tailwind CSS</span>
+        <span class="tech-badge">FastAPI</span>
+        <span class="tech-badge">Python</span>
+        <span class="tech-badge">Claude API · Haiku</span>
+        <span class="tech-badge">RAG</span>
+        <span class="tech-badge">Vercel</span>
+        <span class="tech-badge">Render</span>
+      </div>
+    </div>
+
+    <div class="insights-grid">
+      <div class="insight-card i-coral reveal">
+        <h4>性能 / Performance</h4>
+        <p>出分日预期 1,000 万级峰值流量。冲稳保查询走预计算缓存，目标 P95 &lt; 3 秒。AI 对话用 Haiku 模型，单次成本 &lt; ¥0.01。</p>
+      </div>
+      <div class="insight-card i-blue reveal reveal-delay-1">
+        <h4>可扩展性 / Scalability</h4>
+        <p>数据层按省份分表，先湖北 18K 条跑通，5 月底扩展到全国主要省份。AI 调用按用户限额，每天 20–50 轮，分享解锁。</p>
+      </div>
+      <div class="insight-card i-green reveal reveal-delay-2">
+        <h4>护城河 / Moat</h4>
+        <p>真正的壁垒不是数据（可被复制），而是名校学长网络。Phase 1 清华 30 人 → Phase 5 全 985+热门 211 共 230+ 人。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="text-align:center;padding:3rem 2rem;background:var(--navy);color:rgba(255,255,255,0.45);font-size:0.85rem;">
+  <p>高考志愿助手 &mdash; Product Portfolio &middot; 2026</p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;color:rgba(255,255,255,0.3);">用 AI + 真人学长，让每一个高考生都能做出不后悔的志愿选择。</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id'); });
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+  });
+</script>
+</body>
+</html>
