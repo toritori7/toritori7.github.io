@@ -241,8 +241,19 @@ footer {
 }
 .hero-desc {
   font-size: 1rem; color: var(--ink-light); max-width: 720px;
-  margin: 0 0 2.4rem; line-height: 1.85; font-weight: 400;
+  margin: 0 0 1.4rem; line-height: 1.85; font-weight: 400;
 }
+.hero-link {
+  margin-bottom: 2.4rem;
+}
+.hero-link a {
+  font-size: 0.95rem; color: var(--ink); font-weight: 600;
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 0.15rem;
+  letter-spacing: 0.01em;
+  transition: color 0.2s, border-color 0.2s;
+}
+.hero-link a:hover { color: var(--ink-light); border-color: var(--ink-light); }
 .hero-stats {
   display: flex; gap: 3rem; flex-wrap: wrap; margin-top: 0;
   border-top: 1px solid var(--line-soft); padding-top: 2rem; justify-content: flex-start;
